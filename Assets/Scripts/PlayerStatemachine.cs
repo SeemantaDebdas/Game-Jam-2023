@@ -3,14 +3,17 @@ using UnityEngine;
 
 public class PlayerStatemachine : Statemachine
 {
-    public InputReader InputReader;
-    public CharacterController Controller;
-    public Animator Anim;
+    public InputReader InputReader { get; private set; }
+    public CharacterController Controller { get; private set; }
+    public Animator Anim { get; private set; }
+    public ForceReceiver ForceReceiver { get; private set; }
+
 
     private void Awake()
     {
         InputReader = GetComponent<InputReader>();
         Controller = GetComponent<CharacterController>();
+        ForceReceiver = GetComponent<ForceReceiver>();
 
         if(Anim == null)
             Anim = GetComponent<Animator>();
@@ -20,4 +23,7 @@ public class PlayerStatemachine : Statemachine
     {
         SwitchState(new PlayerLocomotionState(this));
     }
+
+
+
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +6,7 @@ public class InputReader : MonoBehaviour, Controls.IPlayerActions
 {
     Controls controls;
     public Vector2 MoveInput { get; private set; }
+    public event Action OnJumpEvent;
 
     private void Start()
     {
@@ -24,4 +26,10 @@ public class InputReader : MonoBehaviour, Controls.IPlayerActions
     }
 
     public void OnLook(InputAction.CallbackContext context){}
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+        OnJumpEvent?.Invoke();
+    }
 }

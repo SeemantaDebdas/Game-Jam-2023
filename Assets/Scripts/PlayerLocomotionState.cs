@@ -1,25 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerLocomotionState : PlayerBaseState
 {
-
-    float speed = 5f;
-
-    const float rotationSmoothTime = 0.12f;
-    float currentRotationVelocity;
+    readonly float speed = 5f;
 
     public PlayerLocomotionState(PlayerStatemachine SM) : base(SM) { }
 
     public override void Enter()
     {
         SM.Anim.CrossFadeInFixedTime(JogAnim, FixedTransitionDuration);
+
+        SM.InputReader.OnJumpEvent += InputReader_OnJumpEvent;
     }
+
 
     public override void Exit()
     {
-        
+        SM.InputReader.OnJumpEvent -= InputReader_OnJumpEvent;
     }
 
     public override void Tick()
@@ -32,16 +32,14 @@ public class PlayerLocomotionState : PlayerBaseState
             return;
         }
 
-        float targetAngle = Mathf.Atan2(moveInput.x, moveInput.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+        Vector3 targetDirection = RotateTowardsInput();
 
-        if (moveInput != Vector3.zero)
-        {
-            float rotation = Mathf.SmoothDampAngle(SM.transform.eulerAngles.y, targetAngle, ref currentRotationVelocity, rotationSmoothTime);
-            SM.transform.rotation = Quaternion.Euler(0, rotation, 0);
-        }
+        Move(speed * targetDirection);
+    }
 
-        Vector3 targetDirection = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
-
-        SM.Controller.Move(targetDirection * speed * Time.deltaTime);
+    private void InputReader_OnJumpEvent()
+    {
+        if(SM.ForceReceiver.IsGrounded())
+            SM.SwitchState(new PlayerJumpState(SM));
     }
 }
