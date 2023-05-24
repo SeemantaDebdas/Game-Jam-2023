@@ -16,7 +16,6 @@ public class ForceReceiver : MonoBehaviour
 
     private void Start()
     {
-        velocityY = -1;
         Reset();
     }
 
@@ -44,7 +43,7 @@ public class ForceReceiver : MonoBehaviour
      
     public void Reset()
     {
-        velocityY = 0;
+        velocityY = -1;
     }
 
     public bool IsGrounded()

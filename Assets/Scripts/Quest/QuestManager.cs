@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
@@ -35,6 +33,17 @@ public class QuestManager : MonoBehaviour
     public void OnQuestAccepted(QuestSO quest)
     {
         currentQuest = quest;
+        currentQuest.ResetGoal();
         OnQuestUpdated?.Invoke(quest);
+    }
+
+    public void IncreaseCollectible()
+    {
+        currentQuest.Goal.CurrentAmount++;
+        if (currentQuest.Goal.IsReached)
+        {
+            bookQuestEvent.RaiseOnQuestCompletedEvent(currentQuest);
+            LevelLoader.Instance.LoadRoomLevel();
+        }
     }
 }

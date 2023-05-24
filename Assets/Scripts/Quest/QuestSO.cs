@@ -21,4 +21,6 @@ public class QuestSO  : ScriptableObject
     public string Description;
 
     public QuestGoal Goal;
+
+    public void ResetGoal() => Goal.CurrentAmount = 0;
 }

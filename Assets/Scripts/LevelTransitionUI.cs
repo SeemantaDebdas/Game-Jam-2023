@@ -12,14 +12,12 @@ public class LevelTransitionUI : MonoBehaviour
     [SerializeField] float enlargedScale = 2f;
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
+            Destroy(this);
+            return;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
     }
 
     public void CircleScaleUp(Action onComplete)

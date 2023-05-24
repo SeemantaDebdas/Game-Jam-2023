@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PersistantObjects : MonoBehaviour
 {
-    void Start()
+    public static PersistantObjects Instance { get; private set; }
+
+    void Awake()
     {
-        PersistantObjects[] persistantObjects = FindObjectsOfType<PersistantObjects>();
-        foreach(PersistantObjects persistantObject in persistantObjects)
+        if (Instance != null && Instance != this)
         {
-            if (persistantObject != this)
-                Destroy(persistantObject.gameObject);
+            Destroy(this);
+            return;
         }
+        Instance = this;
 
         DontDestroyOnLoad(this);   
     }

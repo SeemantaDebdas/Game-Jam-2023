@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class LevelLoader : MonoBehaviour
 {
     public static LevelLoader Instance { get; private set; }
-
     public event Action OnLevelLoaded;
 
     private void Awake()
@@ -20,11 +19,21 @@ public class LevelLoader : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        
+    }
+
     public void LoadNextLevel()
     {
         int buildIndex = SceneManager.GetActiveScene().buildIndex;
 
         LevelTransitionUI.Instance.CircleScaleUp(() => LoadLevel(buildIndex + 1));
+    }
+
+    public void LoadRoomLevel()
+    {
+        LevelTransitionUI.Instance.CircleScaleUp(() => LoadLevel(0));
     }
 
     void LoadLevel(int buildIndex)
