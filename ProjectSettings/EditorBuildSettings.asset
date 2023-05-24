@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Controller.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/RoomFunctionality.unity
+    guid: 0f567df48c8241141871f234c1bc9532
+  - enabled: 1
+    path: Assets/Scenes/BookScene.unity
+    guid: dfa640ac49bb9284b85e9465128f27cb
   m_configObjects: {}
