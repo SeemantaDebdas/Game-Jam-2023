@@ -61,4 +61,20 @@ public abstract class PlayerBaseState : State
         SM.Anim.CrossFadeInFixedTime(animHash, FixedTransitionDuration);
     }
 
+    protected bool IsOnPlatform(ref Transform platform)
+    {
+        Collider[] colliders = Physics.OverlapSphere(SM.transform.position, 1f);
+        
+        foreach(Collider collider in colliders)
+        {
+            if (collider.transform.CompareTag("ParentTrigger"))
+            {
+                platform = collider.transform;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

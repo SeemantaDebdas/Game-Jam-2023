@@ -8,6 +8,9 @@ public class InputReader : MonoBehaviour, Controls.IPlayerActions
     public Vector2 MoveInput { get; private set; }
     public event Action OnJumpEvent;
 
+    public event Action OnJumpHoldPerformed;
+    public event Action OnJumpHoldCancelled;
+
     private void Start()
     {
         controls = new();
@@ -31,5 +34,13 @@ public class InputReader : MonoBehaviour, Controls.IPlayerActions
     {
         if (!context.performed) return;
         OnJumpEvent?.Invoke();
+    }
+
+    public void OnJumpHold(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            OnJumpHoldPerformed?.Invoke();
+        if (context.canceled)
+            OnJumpHoldCancelled?.Invoke();
     }
 }

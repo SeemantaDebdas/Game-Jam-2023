@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class LevelLoader : MonoBehaviour
 {
     public static LevelLoader Instance { get; private set; }
-    public event Action OnLevelLoaded;
+    public event Action<int> OnLevelLoaded;
 
     private void Awake()
     {
@@ -39,7 +39,7 @@ public class LevelLoader : MonoBehaviour
     void LoadLevel(int buildIndex)
     {
         SceneManager.LoadScene(buildIndex);
-        OnLevelLoaded?.Invoke();
+        OnLevelLoaded?.Invoke(buildIndex);
         LevelTransitionUI.Instance.CircleScaleDown(default);
     }
 }

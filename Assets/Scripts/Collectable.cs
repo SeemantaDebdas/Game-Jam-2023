@@ -18,7 +18,7 @@ public class Collectable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            QuestManager.Instance.IncreaseCollectible();
+            QuestManager.Instance.IncreaseCollectable();
             GetComponent<SphereCollider>().enabled = false;
 
             transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.OutBounce).OnComplete(() => {

@@ -25,6 +25,14 @@ public class PlayerLocomotionState : PlayerBaseState
 
     public override void Tick()
     {
+        Transform platform = null;
+        if (IsOnPlatform(ref platform))
+        {
+            Debug.Log("Entering");
+            SM.SwitchState(new PlayerPlatformState(SM, platform));
+            return;
+        }
+
         Vector3 moveInput = new Vector3(SM.InputReader.MoveInput.x, 0, SM.InputReader.MoveInput.y).normalized;
 
         if (moveInput == Vector3.zero)

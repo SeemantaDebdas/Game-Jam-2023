@@ -14,6 +14,19 @@ public class ForceReceiver : MonoBehaviour
     public float JumpForce = 10f;
     public Vector3 Movement => Vector3.up * velocityY;
 
+    float velocityDescentMultiplier = 3f;
+    const float velocityDescentMultiplierDefault = 3f;
+    const float velocityDescentMultiplierGlide = 0.5f;
+
+    InputReader inputReader = null;
+
+    private void Awake()
+    {
+        inputReader = GetComponent<InputReader>();
+        inputReader.OnJumpHoldPerformed += () => velocityDescentMultiplier = velocityDescentMultiplierGlide;
+        inputReader.OnJumpHoldCancelled += () => velocityDescentMultiplier = velocityDescentMultiplierDefault;
+    }
+
     private void Start()
     {
         Reset();
@@ -31,7 +44,7 @@ public class ForceReceiver : MonoBehaviour
         }
         else if(velocityY < 0f && !IsGrounded())
         {
-            velocityY += Physics.gravity.y * 3f * Time.deltaTime;
+            velocityY += Physics.gravity.y * velocityDescentMultiplier * Time.deltaTime;
         }
     }
 

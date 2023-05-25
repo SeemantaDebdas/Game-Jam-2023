@@ -24,5 +24,21 @@ public class PlayerStatemachine : Statemachine
         SwitchState(new PlayerLocomotionState(this));
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        //if (other.CompareTag("ParentTrigger"))
+        //{
+        //    transform.SetParent(other.transform);
+        //    SwitchState(new PlayerPlatformState(this));
+        //}
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        //if (other.CompareTag("ParentTrigger"))
+        //{
+        //    Debug.Log("Exitted platform");
+        //    transform.SetParent(null);
+        //}
+    }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 { 
     public event Action<QuestSO> OnQuestUpdated;
+    public event Action<QuestSO> OnCollectableIncreased;
 
     [SerializeField] QuestEventSO bookQuestEvent;
     //[SerializeField] QuestEventSO roachQuestEvent;
@@ -37,9 +38,11 @@ public class QuestManager : MonoBehaviour
         OnQuestUpdated?.Invoke(quest);
     }
 
-    public void IncreaseCollectible()
+    public void IncreaseCollectable()
     {
         currentQuest.Goal.CurrentAmount++;
+        OnCollectableIncreased?.Invoke(currentQuest);
+
         if (currentQuest.Goal.IsReached)
         {
             bookQuestEvent.RaiseOnQuestCompletedEvent(currentQuest);
