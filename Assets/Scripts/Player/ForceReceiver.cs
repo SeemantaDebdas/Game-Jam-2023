@@ -6,13 +6,16 @@ using UnityEngine.AI;
 
 public class ForceReceiver : MonoBehaviour
 {
+    public event Action<bool> OnIsGroundedChanged;
+
     float velocityY = 0;
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] LayerMask pushableLayer;
     [SerializeField] float groundCheckDistance = 1.5f;
-    [SerializeField] float pushForce = 2f;
+    [SerializeField] bool canGlide = false;
+
     public float JumpForce = 10f;
     public Vector3 Movement => Vector3.up * velocityY;
+    public bool CanGlide => canGlide;
 
     float velocityDescentMultiplier = 3f;
     const float velocityDescentMultiplierDefault = 3f;
@@ -20,9 +23,13 @@ public class ForceReceiver : MonoBehaviour
 
     InputReader inputReader = null;
 
+    bool wasGroundedLastFrame = true;
+
     private void Awake()
     {
         inputReader = GetComponent<InputReader>();
+
+        if (!canGlide) return;
         inputReader.OnJumpHoldPerformed += () => velocityDescentMultiplier = velocityDescentMultiplierGlide;
         inputReader.OnJumpHoldCancelled += () => velocityDescentMultiplier = velocityDescentMultiplierDefault;
     }
@@ -34,18 +41,27 @@ public class ForceReceiver : MonoBehaviour
 
     private void Update()
     {
-        if (velocityY < 0f && IsGrounded())
+        bool isGrounded = IsGrounded();
+
+        if (velocityY < 0f && isGrounded)
         {
             velocityY = -1f;
         }
-        else if(velocityY > 0f && !IsGrounded())
+        else if(velocityY > 0f && !isGrounded)
         {
             velocityY += Physics.gravity.y * 2f * Time.deltaTime;
         }
-        else if(velocityY < 0f && !IsGrounded())
+        else if(velocityY < 0f && !isGrounded)
         {
             velocityY += Physics.gravity.y * velocityDescentMultiplier * Time.deltaTime;
         }
+
+        if(isGrounded != wasGroundedLastFrame)
+        {
+            OnIsGroundedChanged?.Invoke(isGrounded);
+        }
+
+        wasGroundedLastFrame = isGrounded;
     }
 
 
@@ -66,29 +82,10 @@ public class ForceReceiver : MonoBehaviour
         return false;
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (!IsGrounded()) return;
-        if (!hit.transform.CompareTag("Pushable"))
-        { 
-            return;
-        }
-
-        Debug.Log(hit.transform.name);
-
-        Rigidbody rb = hit.collider.attachedRigidbody;
-        if (rb != null && !rb.isKinematic)
-        {
-            rb.velocity = hit.moveDirection * pushForce;
-        }
-    }
-
-
     private void OnDrawGizmos()
     {
         Gizmos.color = IsGrounded() ? Color.green : Color.red;
         Gizmos.DrawLine(transform.position + transform.up * 0.1f, transform.position  + -transform.up * groundCheckDistance);
-
     }
 
 }
