@@ -16,5 +16,5 @@ MonoBehaviour:
   Description: Collect the 5 lost books
   Goal:
     Type: 1
-    RequiredAmount: 1
-    CurrentAmount: 1
+    RequiredAmount: 5
+    CurrentAmount: 5

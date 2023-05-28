@@ -12,11 +12,13 @@ public class PlayerIdleState : PlayerBaseState
     {
         SM.Anim.CrossFadeInFixedTime(IdleAnim, FixedTransitionDuration);
         SM.InputReader.OnJumpEvent += InputReader_OnJumpEvent;
+        SM.InputReader.OnAimPerformed += InputReader_OnAimPerformed;
     }
 
     public override void Exit()
     {
         SM.InputReader.OnJumpEvent -= InputReader_OnJumpEvent;
+        SM.InputReader.OnAimPerformed -= InputReader_OnAimPerformed;
     }
 
     public override void Tick()
@@ -31,5 +33,9 @@ public class PlayerIdleState : PlayerBaseState
     {
         if (SM.ForceReceiver.IsGrounded())
             SM.SwitchState(new PlayerJumpState(SM));
+    }
+    private void InputReader_OnAimPerformed()
+    {
+        SM.SwitchState(new PlayerAimState(SM));
     }
 }
